@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Banco Pichincha - Inicio</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-inner">
+            <!-- Logo: usa imagen si existe; si no, queda el fallback con P -->
+            <div class="logo logo-text">
+                <img class="logo-img" src="{{ url_for('static', filename='img/logo.png') }}" alt="Banco Pichincha" />
+            </div>
+
+            <div class="header-actions">
+                <div class="header-pill">Banca Web</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <main class="home-wrap">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-left">
+                <h1 class="hero-title">Tu banco, más simple.</h1>
+                <p class="hero-subtitle">
+                    Accede a la banca web para consultar productos, ver movimientos, usar Deuna y generar retiros sin tarjeta.
+                </p>
+
+                <div class="hero-badges">
+                    <div class="badge">Transferencias</div>
+                    <div class="badge">Deuna</div>
+                    <div class="badge">Retiros sin tarjeta</div>
+                    <div class="badge">Historial</div>
+                </div>
+
+                <div style="margin-top: 18px; display: grid; gap: 10px;">
+                    <a href="/banca-web/1" class="btn btn-yellow">Ingresar como Juan (Cliente)</a>
+                    <a href="/banca-web/2" class="btn btn-outline">Ingresar como Tienda (Comercio)</a>
+                    <a href="/cajero" class="btn btn-primary">Ir al Cajero</a>
+                </div>
+            </div>
+
+            <!-- Imagen Hero -->
+            <div class="hero-visual">
+                <img src="{{ url_for('static', filename='img/hero.jpg') }}" alt="Banca Web" />
+            </div>
+        </section>
+
+        <!-- Cards informativas -->
+        <section class="cards-grid">
+            <article class="feature-card">
+                <h4 class="feature-title">Banca Personas</h4>
+                <p class="feature-text">
+                    Consulta tu cuenta y revisa tus movimientos recientes desde un solo lugar.
+                </p>
+            </article>
+
+            <article class="feature-card">
+                <h4 class="feature-title">Deuna</h4>
+                <p class="feature-text">
+                    Realiza pagos y recargas de saldo usando la billetera.
+                </p>
+            </article>
+
+            <article class="feature-card">
+                <h4 class="feature-title">Cajero Automático</h4>
+                <p class="feature-text">
+                    Genera un código en banca web y cobra en el cajero con tu OTP y teléfono.
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div>© 2026 Banco Pichincha • Proyecto académico</div>
+        <div>Hecho por: Benalcázar, Guerra, Montufar, Tipán</div>
+    </div>
+</body>
+</html>

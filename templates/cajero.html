@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cajero Banco Pichincha</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* =========================================
+           ESTILOS BASE (ESTÉTICA DE LA FOTO)
+           ========================================= */
+        :root {
+            --bp-yellow: #FFDD00;
+            --bp-blue: #0F265C;
+            --bp-grey-text: #666;
+            --bp-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bp-bg);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* BARRA SUPERIOR AMARILLA */
+        .top-bar {
+            background-color: var(--bp-yellow);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding-left: 40px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--bp-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: var(--bp-blue);
+            color: var(--bp-yellow);
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 20px;
+        }
+
+        /* CONTENEDOR PRINCIPAL DE PANTALLAS */
+        .screen-container {
+            flex: 1;
+            display: flex; /* Flex para centrar contenido */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* OCULTAR PANTALLAS NO ACTIVAS */
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================
+           PANTALLA 1: BIENVENIDA (LA IMAGEN)
+           ========================================= */
+        h1.welcome-text {
+            color: #4a4a4a; /* Gris oscuro de la foto */
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .network-logos {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            color: #555;
+            font-weight: bold;
+            font-size: 20px;
+            opacity: 0.7;
+        }
+
+        .instruction-text {
+            color: #888;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .instruction-subtext {
+            color: #aaa;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        /* GRÁFICO DE LA RANURA (SVG SIMULADO) */
+        .card-slot-graphic {
+            width: 120px;
+            height: 180px;
+            border: 4px solid #0F265C;
+            border-radius: 10px;
+            margin: 0 auto 60px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card-slot-graphic::after {
+            content: '▲';
+            position: absolute;
+            bottom: 20px;
+            color: #0F265C;
+            font-size: 24px;
+        }
+        
+        .hand-icon {
+            font-size: 60px;
+            color: #0F265C;
+            position: absolute;
+            bottom: -30px;
+            background: white;
+            padding: 0 10px;
+        }
+
+        /* BOTÓN "SIN TARJETA" (COMO EN LA FOTO) */
+        .btn-cardless {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            color: #666;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.2s;
+        }
+
+        .btn-cardless:hover {
+            color: var(--bp-blue);
+        }
+        
+        .arrow-right {
+            color: var(--bp-yellow);
+            font-weight: 900;
+            font-size: 28px;
+        }
+
+        /* =========================================
+           PANTALLAS 2 y 3: INPUTS (CELULAR / OTP)
+           ========================================= */
+        .input-group {
+            margin-top: 40px;
+        }
+
+        input[type="text"], input[type="password"] {
+            font-size: 32px;
+            padding: 15px 20px;
+            width: 100%;
+            max-width: 400px;
+            border: none;
+            border-bottom: 3px solid var(--bp-yellow);
+            text-align: center;
+            outline: none;
+            color: var(--bp-blue);
+            letter-spacing: 2px;
+        }
+        
+        input::placeholder {
+            color: #ccc;
+        }
+
+        /* BOTONES DE NAVEGACIÓN */
+        .nav-buttons {
+            margin-top: 60px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .btn-nav {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            min-width: 160px;
+            transition: transform 0.1s;
+        }
+
+        .btn-next {
+            background-color: var(--bp-blue);
+            color: white;
+        }
+
+        .btn-back {
+            background-color: #e0e0e0;
+            color: #555;
+        }
+
+        .btn-nav:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        /* =========================================
+           PANTALLA 4: RESULTADO
+           ========================================= */
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="logo-container">
+            <div class="logo-icon">P</div>
+            BANCO PICHINCHA
+        </div>
+    </div>
+
+    <div class="screen-container">
+
+        <div id="screen-welcome" class="screen active">
+            <h1 class="welcome-text">Bienvenido a la mayor red de cajeros automáticos</h1>
+            
+            <div class="network-logos">
+                <span>BANRED</span>
+                <span style="color:red; opacity:0.6;"><i class="fa-brands fa-cc-mastercard"></i></span>
+                <span style="color:blue; opacity:0.6;"><i class="fa-brands fa-cc-visa"></i></span>
+                <span>DISCOVER</span>
+                <span>Diners Club</span>
+            </div>
+
+            <div class="instruction-text">Inserta tu tarjeta, no la retires y sigue las instrucciones</div>
+            <div class="instruction-subtext">Insert your card, do not remove it and follow the instructions</div>
+
+            <div class="card-slot-graphic">
+                <div class="hand-icon"><i class="fa-solid fa-hand-point-up"></i></div>
+            </div>
+
+            <div class="btn-cardless" onclick="goToScreen('screen-phone')">
+                Depósitos, pagos o transacciones sin tarjeta <span class="arrow-right">></span>
+            </div>
+        </div>
+
+        <div id="screen-phone" class="screen">
+            <h1 class="welcome-text">Retiro sin Tarjeta</h1>
+            <div class="instruction-text">Por favor, ingrese su número de celular</div>
+            
+            <div class="input-group">
+                <input type="text" id="input-phone" placeholder="099..." maxlength="10" autocomplete="off">
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-nav btn-back" onclick="goToScreen('screen-welcome')">Retroceder</button>
+                <button class="btn-nav btn-next" onclick="validatePhone()">Siguiente</button>
+            </div>
+        </div>
+
+        <div id="screen-otp" class="screen">
+            <h1 class="welcome-text">Código de Seguridad</h1>
+            <div class="instruction-text">Ingrese la clave temporal enviada a su dispositivo</div>
+
+            <div class="input-group">
+                <input type="password" id="input-otp" placeholder="******" maxlength="6" autocomplete="off">
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-nav btn-back" onclick="goToScreen('screen-phone')">Retroceder</button>
+                <button class="btn-nav btn-next" onclick="submitTransaction()">Confirmar Retiro</button>
+            </div>
+        </div>
+
+        <div id="screen-result" class="screen">
+            <div id="result-content">
+                </div>
+            <div class="nav-buttons">
+                <button class="btn-nav btn-next" onclick="location.reload()">Finalizar</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Función para cambiar entre pantallas
+        function goToScreen(screenId) {
+            // Ocultar todas
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Mostrar la deseada
+            const activeScreen = document.getElementById(screenId);
+            activeScreen.classList.add('active');
+
+            // Auto-focus si hay un input en la nueva pantalla
+            const input = activeScreen.querySelector('input');
+            if(input) {
+                setTimeout(() => input.focus(), 300); // Pequeño delay para la animación
+            }
+        }
+
+        // Validación simple del teléfono
+        function validatePhone() {
+            const phone = document.getElementById('input-phone').value;
+            if (phone.length === 10) {
+                goToScreen('screen-otp');
+            } else {
+                alert("Por favor ingrese un número de celular válido de 10 dígitos.");
+            }
+        }
+
+        // Ejecutar transacción (Fetch a la API)
+        // Variable global de bloqueo
+    let procesando = false;
+
+    function submitTransaction() {
+        // 1. Si el semáforo está en rojo, no dejamos pasar a nadie
+        if (procesando) return;
+
+        const telefono = document.getElementById('input-phone').value;
+        const otp = document.getElementById('input-otp').value;
+
+        if (otp.length < 4) {
+            alert("Ingrese el código completo.");
+            return;
+        }
+
+        // 2. PONEMOS EL CANDADO (Bloqueo visual y lógico)
+        procesando = true;
+
+        // Bloqueamos el Input para que no puedan escribir ni dar Enter
+        const inputOtp = document.getElementById('input-otp');
+        inputOtp.disabled = true;
+
+        // Bloqueamos el Botón y cambiamos el texto
+        const btnConfirmar = document.querySelector('#screen-otp .btn-next');
+        const textoOriginal = btnConfirmar.innerText;
+        btnConfirmar.innerText = "Procesando...";
+        btnConfirmar.style.opacity = "0.6";
+        btnConfirmar.style.cursor = "not-allowed";
+
+        fetch('/api/ejecutar-retiro', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ otp: otp, telefono: telefono })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Al recibir respuesta, mostramos el resultado
+            // NO desbloqueamos nada porque ya terminó el flujo
+            showResult(data.success, data.message);
+        })
+        .catch(err => {
+            // Solo si hay error de RED (se cayó internet), desbloqueamos para reintentar
+            console.error(err);
+            alert("Error de conexión. Intente nuevamente.");
+            
+            // Quitamos el candado
+            procesando = false;
+            inputOtp.disabled = false;
+            inputOtp.focus();
+            btnConfirmar.innerText = textoOriginal;
+            btnConfirmar.style.opacity = "1";
+            btnConfirmar.style.cursor = "pointer";
+        });
+    }
+
+    // Corrección para la tecla ENTER (usamos keydown en vez de keypress)
+    document.getElementById('input-otp').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Evita que el navegador envíe el formulario por su cuenta
+            submitTransaction();
+        }
+    });
+
+        // Mostrar pantalla de resultado
+        function showResult(success, message) {
+            const container = document.getElementById('result-content');
+            
+            if (success) {
+                container.innerHTML = `
+                    <div class="result-icon success"><i class="fa-solid fa-circle-check"></i></div>
+                    <h1 class="welcome-text">¡Retiro Exitoso!</h1>
+                    <div class="instruction-text">${message}</div>
+                    <div class="instruction-subtext">Por favor tome su dinero y recibo.</div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="result-icon error"><i class="fa-solid fa-circle-xmark"></i></div>
+                    <h1 class="welcome-text">Transacción Fallida</h1>
+                    <div class="instruction-text">${message}</div>
+                    <div class="instruction-subtext">Verifique sus datos e intente nuevamente.</div>
+                `;
+            }
+            goToScreen('screen-result');
+        }
+
+        // Permitir usar la tecla "Enter" para avanzar
+        document.getElementById('input-phone').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') validatePhone();
+        });
+
+        document.getElementById('input-otp').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') submitTransaction();
+        });
+
+    </script>
+</body>
+</html>

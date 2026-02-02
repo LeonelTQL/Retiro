@@ -1,0 +1,1173 @@
+/* --- ¡LA SOLUCIÓN MÁGICA ESTÁ AQUÍ! --- */
+/* Esto asegura que el padding y el borde no aumenten el ancho de los elementos,
+   evitando que se salgan de sus contenedores. */
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+/* --------------------------------------- */
+
+:root {
+    --bp-yellow: #FFDD00;
+    --bp-blue: #0F265C;
+    --bp-grey: #f4f6f9;
+}
+body { font-family: 'Arial', sans-serif; background-color: var(--bp-grey); margin: 0; }
+
+/* Header Banco Pichincha */
+.header { background-color: rgb(190, 190, 190); padding: 15px 40px; display: flex; align-items: center; justify-content: space-between;}
+.logo { font-weight: bold; font-size: 24px; color: var(--bp-blue); display: flex; align-items: center; }
+.logo span { background: var(--bp-blue); color: var(--bp-yellow); padding: 2px 5px; margin-right: 5px; border-radius: 3px; }
+
+/* Layout Banca Web */
+.container-web { display: flex; min-height: 100vh; } /* Cambiado a min-height para evitar problemas de scroll */
+.sidebar { width: 250px; background: white; padding: 20px; border-right: 1px solid #ddd; display: flex; flex-direction: column; } /* Flex para el sidebar */
+
+/* Estilos de los items del menú */
+.menu-item { padding: 15px; color: var(--bp-blue); cursor: pointer; border-radius: 5px; text-decoration: none; display: block; margin-bottom: 5px; transition: background-color 0.2s; }
+.menu-item:hover { background-color: #f0f0f0; }
+.menu-item.active { background-color: var(--bp-yellow); font-weight: bold; }
+.menu-item-cerrar { margin-top: auto; color: #d9534f; } /* Clase específica para cerrar sesión */
+.main-content { flex: 1; padding: 40px; overflow-y: auto; } /* Scroll en el contenido principal si es necesario */
+
+/* Cards y Botones */
+.card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; width: 100%; } /* width: 100% para asegurar que no se encoja demasiado */
+.btn-pichincha { background-color: var(--bp-yellow); color: var(--bp-blue); border: none; padding: 12px 24px; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; margin-top: 20px; display: block; text-align: center; text-decoration: none; font-size: 16px; transition: background-color 0.2s; }
+.btn-pichincha:hover { background-color: #e6c700; }
+
+/* Input del ATM */
+#otp-input {
+    font-size: 32px;
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+    letter-spacing: 8px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-family: monospace;
+}
+
+/* ===========================
+   HOME (Landing moderna)
+=========================== */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 6px 18px rgba(15, 38, 92, 0.08);
+}
+
+.header-inner {
+    width: min(1100px, calc(100% - 80px));
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.header-pill {
+    background: rgba(15, 38, 92, 0.08);
+    color: var(--bp-blue);
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.home-wrap {
+    width: min(1100px, calc(100% - 80px));
+    margin: 0 auto;
+    padding: 40px 0 60px;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 28px;
+    align-items: stretch;
+    margin-top: 26px;
+}
+
+.hero-left {
+    background: linear-gradient(135deg, rgba(255, 221, 0, 0.95), rgba(255, 221, 0, 0.70));
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 12px 30px rgba(15, 38, 92, 0.10);
+    overflow: hidden;
+    position: relative;
+}
+
+.hero-left::after {
+    content: "";
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(15, 38, 92, 0.10);
+    filter: blur(0px);
+}
+
+.hero-title {
+    color: var(--bp-blue);
+    margin: 0 0 8px;
+    font-size: 34px;
+    letter-spacing: -0.6px;
+}
+
+.hero-subtitle {
+    color: rgba(15, 38, 92, 0.85);
+    margin: 0 0 18px;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 52ch;
+}
+
+.hero-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(15, 38, 92, 0.15);
+    color: var(--bp-blue);
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hero-right {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 12px 30px rgba(15, 38, 92, 0.10);
+    border: 1px solid rgba(15, 38, 92, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quick-title {
+    color: var(--bp-blue);
+    margin: 0 0 6px;
+    font-size: 18px;
+}
+
+.quick-text {
+    color: #5a647a;
+    margin: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.quick-actions {
+    display: grid;
+    gap: 10px;
+}
+
+.btn {
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-weight: 700;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: transform 0.06s ease, box-shadow 0.2s ease, background-color 0.2s ease, opacity 0.2s;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: var(--bp-blue);
+    color: white;
+    box-shadow: 0 10px 18px rgba(15, 38, 92, 0.20);
+}
+
+.btn-primary:hover {
+    opacity: 0.95;
+}
+
+.btn-yellow {
+    background: var(--bp-yellow);
+    color: var(--bp-blue);
+    box-shadow: 0 10px 18px rgba(15, 38, 92, 0.14);
+}
+
+.btn-yellow:hover {
+    background: #e6c700;
+}
+
+.btn-outline {
+    background: #fff;
+    color: var(--bp-blue);
+    border: 1px solid rgba(15, 38, 92, 0.22);
+}
+
+.btn-outline:hover {
+    background: rgba(15, 38, 92, 0.04);
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 22px;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    border: 1px solid rgba(15, 38, 92, 0.08);
+    box-shadow: 0 10px 22px rgba(15, 38, 92, 0.06);
+}
+
+.feature-title {
+    margin: 0 0 6px;
+    color: var(--bp-blue);
+    font-size: 16px;
+}
+
+.feature-text {
+    margin: 0;
+    color: #5a647a;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer {
+    width: min(1100px, calc(100% - 80px));
+    margin: 30px auto 50px;
+    color: #7b859a;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 980px) {
+    .hero { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .header-inner, .home-wrap, .footer {
+        width: min(1100px, calc(100% - 40px));
+    }
+}
+
+
+/* ===========================
+   HOME con imágenes
+=========================== */
+
+.logo-img {
+    height: 34px;
+    width: auto;
+    display: block;
+}
+
+.logo-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hero {
+    grid-template-columns: 1fr 1fr; /* más balanceado al meter imagen */
+}
+
+.hero-left {
+    padding: 24px;
+}
+
+.hero-visual {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(15, 38, 92, 0.10);
+    border: 1px solid rgba(15, 38, 92, 0.08);
+    background: white;
+    position: relative;
+    min-height: 320px;
+}
+
+.hero-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* capa sutil para que se sienta "banca" */
+.hero-visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(15,38,92,0.10), rgba(255,221,0,0.10));
+    pointer-events: none;
+}
+
+/* peinar el header para el logo real */
+.header-inner .logo {
+    gap: 10px;
+}
+
+@media (max-width: 980px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { min-height: 220px; }
+}
+
+/* =========================================================
+   BANCA WEB — Pulido visual (Productos / Retiro / Deuna)
+   Pegar al FINAL del style.css
+========================================================= */
+
+/* Base */
+:root{
+  --bp-yellow: #FFDD00;
+  --bp-blue: #0F265C;
+  --bp-grey: #f4f6f9;
+
+  --ink: #0b1b3a;
+  --muted: #6b7280;
+  --line: #e6e8ee;
+
+  --card-radius: 14px;
+  --shadow-soft: 0 6px 18px rgba(15, 38, 92, 0.08);
+  --shadow-hover: 0 10px 28px rgba(15, 38, 92, 0.12);
+}
+
+body{
+  color: var(--ink);
+}
+
+/* Header */
+.header{
+  background: #e9eaec;
+  padding: 14px 32px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.header-inner{
+  max-width: 1200px;
+  margin: 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.logo-img{
+  height: 34px;
+  width: auto;
+  display:block;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.header-pill{
+  background: #d8dbe0;
+  color: var(--bp-blue);
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+/* Layout */
+.container-web{
+  min-height: calc(100vh - 60px);
+  background: linear-gradient(#f6f7f9, #eef1f6);
+}
+
+.sidebar{
+  width: 270px;
+  padding: 22px 18px;
+  border-right: 1px solid rgba(0,0,0,0.06);
+}
+
+.main-content{
+  padding: 34px 28px;
+}
+
+/* Sidebar items */
+.menu-item{
+  border-radius: 12px;
+  padding: 14px 14px;
+  font-weight: 650;
+  color: var(--bp-blue);
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid transparent;
+}
+
+.menu-item:hover{
+  background: rgba(15, 38, 92, 0.04);
+  border-color: rgba(15, 38, 92, 0.08);
+}
+
+.menu-item.active{
+  background: var(--bp-yellow);
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 8px 18px rgba(255, 221, 0, 0.25);
+}
+
+.menu-item-cerrar .menu-item{
+  font-weight: 700;
+}
+
+.menu-item-cerrar .menu-item:hover{
+  background: rgba(217, 83, 79, 0.08);
+  border-color: rgba(217, 83, 79, 0.18);
+}
+
+/* Card base */
+.card{
+  background: #fff;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(0,0,0,0.04);
+  padding: 28px;
+  max-width: 720px;
+}
+
+/* Botón principal */
+.btn-pichincha{
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.10);
+  box-shadow: 0 10px 18px rgba(15, 38, 92, 0.10);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.btn-pichincha:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn-pichincha:active{
+  transform: translateY(0px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Inputs (para Retiro / Deuna) */
+input[type="tel"],
+input[type="number"],
+input[type="text"]{
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: border .12s ease, box-shadow .12s ease;
+}
+
+input[type="tel"]:focus,
+input[type="number"]:focus,
+input[type="text"]:focus{
+  border-color: rgba(15, 38, 92, 0.35);
+  box-shadow: 0 0 0 4px rgba(15, 38, 92, 0.10);
+}
+
+/* Retiro: caja del formulario más “banca” */
+.card > div[style*="border: 1px solid"]{
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  border-radius: 14px !important;
+  padding: 18px !important;
+  background: linear-gradient(#ffffff, #fbfbfd) !important;
+}
+
+/* Resultado retiro: mensaje más limpio */
+#resultado-retiro{
+  border-radius: 14px !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Productos: cabecera saldo */
+.header-saldo{
+  background: #fff;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(0,0,0,0.04);
+  padding: 20px 22px;
+  max-width: 980px;
+}
+
+.cuenta-label{
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+.monto-gigante{
+  font-size: 46px;
+  font-weight: 900;
+  margin: 10px 0 0;
+  color: var(--bp-blue);
+}
+
+/* Acciones (iconos) */
+.acciones-grid{
+  max-width: 980px;
+  margin-top: 16px;
+  gap: 14px;
+}
+
+.circulo-icon{
+  width: 60px;
+  height: 60px;
+  border-radius: 18px; /* no círculo perfecto, más “app bancaria” */
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 8px 14px rgba(15, 38, 92, 0.08);
+}
+
+.badge-nuevo{
+  background: #0f8a3a;
+  font-weight: 800;
+}
+
+/* Movimientos */
+.fecha-header{
+  margin-top: 18px;
+  font-weight: 900;
+  color: var(--bp-blue);
+}
+
+.lista-transacciones{
+  max-width: 980px;
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-soft);
+}
+
+.item-transaccion:hover{
+  background: #fbfbfd;
+}
+
+.desc-tx{
+  color: #111827;
+  font-weight: 650;
+}
+
+.saldo-restante{
+  color: var(--muted);
+}
+
+/* Botón flotante */
+.btn-flotante{
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 900;
+  border: 1px solid rgba(0,0,0,0.10);
+}
+
+/* Modal */
+.modal-overlay{
+  backdrop-filter: blur(6px);
+}
+
+.modal-content{
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.28);
+}
+
+.btn-cancelar{
+  background: #fff !important;
+  color: #374151 !important;
+}
+
+/* Deuna: mejorar tarjetas “Cobrar / Pagar” sin tocar HTML */
+.card[style*="text-align: center"]{
+  max-width: 760px;
+}
+
+.card[style*="text-align: center"] > div[style*="position: absolute"]{
+  border-radius: 14px !important;
+  box-shadow: 0 10px 18px rgba(15, 38, 92, 0.08);
+}
+
+.card[style*="display: flex"][style*="gap: 20px"] > div{
+  border-radius: 18px !important;
+  box-shadow: 0 12px 24px rgba(15, 38, 92, 0.10) !important;
+}
+
+.card[style*="display: flex"][style*="gap: 20px"] > div:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(15, 38, 92, 0.14) !important;
+}
+
+/* Responsive */
+@media (max-width: 920px){
+  .sidebar{ width: 230px; }
+  .main-content{ padding: 24px 18px; }
+}
+
+@media (max-width: 780px){
+  .container-web{ flex-direction: column; }
+  .sidebar{
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .menu-item{ flex: 1; min-width: 180px; }
+  .menu-item-cerrar{ width: 100%; }
+  .header-inner{ padding: 0 8px; }
+}
+
+/* ===============================
+   BANCA WEB (layout + look)
+   =============================== */
+
+:root{
+  --bp-yellow:#FFDD00;
+  --bp-blue:#0F265C;
+  --bp-grey:#f4f6f9;
+
+  --ink:#0b1b3a;
+  --muted:#6b7280;
+  --line: rgba(15,38,92,.10);
+  --card: #ffffff;
+  --shadow: 0 10px 25px rgba(15,38,92,.08);
+  --shadow-soft: 0 2px 10px rgba(15,38,92,.06);
+}
+
+/* Fondo general del área banca */
+body{
+  background: #eef1f5;
+}
+
+/* Topbar gris como banca */
+.header{
+  background: #d9d9d9;
+  padding: 14px 28px;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.logo{
+  font-weight: 800;
+  letter-spacing: .3px;
+  color: var(--bp-blue);
+  gap: 10px;
+}
+
+.logo span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: var(--bp-blue);
+  color: var(--bp-yellow);
+  font-weight: 900;
+}
+
+/* Layout principal */
+.container-web{
+  display:flex;
+  min-height: calc(100vh - 62px);
+}
+
+/* Sidebar tipo banca */
+.sidebar{
+  width: 280px;
+  background: #ffffff;
+  border-right: 1px solid var(--line);
+  padding: 22px 18px;
+}
+
+.sidebar small{
+  color:#8a8f98 !important;
+  letter-spacing:.6px;
+  font-size: 12px;
+}
+
+/* Items menú */
+.menu-item{
+  padding: 14px 14px;
+  border-radius: 10px;
+  color: var(--bp-blue);
+  font-weight: 600;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+}
+
+.menu-item:hover{
+  background: rgba(15,38,92,.04);
+  border-color: rgba(15,38,92,.05);
+}
+
+.menu-item.active{
+  background: var(--bp-yellow);
+  border-color: rgba(0,0,0,.05);
+  font-weight: 800;
+}
+
+/* Tag APP en Deuna */
+.menu-item span:last-child{
+  font-weight: 800;
+}
+
+/* Cerrar sesión abajo */
+.menu-item-cerrar{
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(15,38,92,.08);
+}
+
+.menu-item-cerrar .menu-item{
+  color: #d9534f !important;
+  font-weight: 700;
+}
+
+/* Contenido */
+.main-content{
+  flex:1;
+  padding: 26px 28px;
+  overflow:auto;
+}
+
+/* ===============================
+   SECCIÓN PRODUCTOS (la captura)
+   =============================== */
+
+/* Card de saldo superior */
+.header-saldo{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 22px;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 18px;
+}
+
+/* Etiqueta cuenta */
+.cuenta-label{
+  color: #2b2f36;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+/* Monto grande */
+.monto-gigante{
+  margin-top: 10px;
+  font-size: 52px;
+  letter-spacing: -0.8px;
+  color: var(--bp-blue);
+  font-weight: 900;
+}
+
+/* Acciones circulares arriba */
+.acciones-grid{
+  display:flex;
+  justify-content: space-around;
+  align-items:center;
+  gap: 22px;
+  padding: 8px 0 18px;
+  margin-bottom: 10px;
+}
+
+.accion-btn{
+  position: relative;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  cursor:pointer;
+  user-select:none;
+}
+
+.circulo-icon{
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(15,38,92,.12);
+  box-shadow: 0 6px 16px rgba(15,38,92,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 22px;
+  color: var(--bp-blue);
+}
+
+.badge-nuevo{
+  position:absolute;
+  bottom: -10px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+  background: #0b7a34;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+/* Título movimientos */
+.fecha-header{
+  font-size: 14px;
+  font-weight: 900;
+  color: #2b2f36;
+  margin: 10px 0 10px;
+}
+
+/* Lista transacciones */
+.lista-transacciones{
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  overflow:hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.item-transaccion{
+  padding: 18px 18px;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(15,38,92,.06);
+}
+
+.item-transaccion:last-child{
+  border-bottom: none;
+}
+
+.desc-tx{
+  color:#2b2f36;
+  font-weight: 600;
+  font-size: 14px;
+  max-width: 70%;
+}
+
+.montos-tx{
+  text-align:right;
+}
+
+.valor-tx{
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.valor-verde{
+  color:#0b7a34;
+}
+
+.valor-negro{
+  color:#111827;
+}
+
+.saldo-restante{
+  display:block;
+  margin-top: 2px;
+  font-size: 12px;
+  color:#7a808a;
+  font-weight: 600;
+}
+
+/* Botón flotante centrado */
+.btn-flotante{
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2f7af8;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgba(47,122,248,.35);
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  z-index: 999;
+}
+
+.btn-flotante:hover{
+  filter: brightness(.98);
+}
+
+/* ===============================
+   MODAL (recarga) más limpio
+   =============================== */
+.modal-overlay{
+  backdrop-filter: blur(4px);
+}
+
+.modal-content{
+  border: 1px solid rgba(15,38,92,.10);
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.25);
+}
+
+.btn-cancelar{
+  background: #fff !important;
+  color: #475569 !important;
+  border: 1px solid rgba(15,38,92,.18) !important;
+}
+
+/* ===============================
+   Responsive
+   =============================== */
+@media (max-width: 980px){
+  .sidebar{ width: 230px; }
+  .monto-gigante{ font-size: 42px; }
+}
+
+@media (max-width: 760px){
+  .container-web{ flex-direction: column; }
+  .sidebar{
+    width: 100%;
+    display:flex;
+    gap: 10px;
+    overflow:auto;
+    padding: 12px 12px;
+  }
+  .menu-item{ white-space: nowrap; margin-bottom:0; }
+  .menu-item-cerrar{ margin-top:0; padding-top:0; border-top:none; }
+}
+
+/* =========================
+   FIX MODAL RECARGA
+========================= */
+
+/* El overlay debe cubrir TODA la pantalla */
+.modal-overlay{
+  position: fixed !important;
+  inset: 0 !important;              /* top/right/bottom/left = 0 */
+  display: none;                    /* se muestra con JS: flex */
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0,0,0,0.45) !important;
+  z-index: 9999 !important;
+  padding: 20px !important;
+}
+
+/* Caja del modal centrada y con tamaño normal */
+.modal-content{
+  width: min(520px, 92vw) !important;
+  max-height: 85vh !important;
+  overflow: auto !important;
+
+  background: #fff !important;
+  border-radius: 16px !important;
+  padding: 22px !important;
+
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25) !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+}
+
+/* Evita que el botón se vea “kilométrico” dentro del modal */
+.modal-content .btn-pichincha{
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-top: 10px !important;
+}
+
+/* Input del modal: consistente */
+.modal-content input[type="number"]{
+  width: 100% !important;
+  border-radius: 12px !important;
+}
+
+/* Por si tu .btn-flotante se pone encima */
+.btn-flotante{
+  z-index: 1000;  /* menor que el modal */
+}
+
+/* Opcional: cuando modal abierto, no scrollea el fondo */
+body.modal-open{
+  overflow: hidden;
+}
+
+/* =========================
+   ATM (sin azul chillón)
+   ========================= */
+
+:root{
+  /* si ya tienes estos, se sobrescriben */
+  --bp-yellow: #e6c700;        /* amarillo menos neón */
+  --bp-blue: #1b2a3a;          /* azul/gris oscuro sobrio */
+}
+
+/* Fondo: gris azulado suave (nada fosforescente) */
+.atm-screen{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+
+    background: white;
+
+}
+
+/* Caja principal */
+.atm-box{
+  width: 520px;
+  max-width: 92vw;
+  padding: 34px 34px 28px;
+
+  border-radius: 22px;
+  background: rgb(131, 131, 131);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+
+  text-align: center;
+}
+
+/* Logo */
+.logo{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.logo-img{
+  height: 42px;
+  opacity: 0.95;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+}
+
+/* Títulos */
+.atm-box h2{
+  margin: 0;
+  font-size: 28px;
+  color: rgba(255,255,255,0.95);
+  letter-spacing: 0.2px;
+}
+
+.atm-box p{
+  margin: 8px 0 18px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Inputs */
+#telefono-input,
+#otp-input{
+  width: 85%;
+  max-width: 420px;
+  display: block;
+  margin: 0 auto 12px;
+
+  padding: 14px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(245,247,250,0.96);
+  color: #1f2a33;
+
+  font-size: 16px;
+  text-align: center;
+  outline: none;
+}
+
+#otp-input{
+  font-size: 22px;
+  letter-spacing: 6px;
+}
+
+/* Tu clase ya existe en HTML, la mejoramos */
+.input-activo{
+  border: 2px solid var(--bp-yellow) !important;
+  background: rgba(255,255,255,0.98) !important;
+  box-shadow: 0 0 0 4px rgba(230,199,0,0.22);
+}
+
+/* Numpad */
+.numpad{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 85%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Botones numéricos */
+.num-btn{
+  height: 64px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(247,248,250,0.98);
+
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2a33;
+
+  box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+  cursor: pointer;
+  transition: transform .08s ease, filter .12s ease;
+}
+
+.num-btn:hover{ filter: brightness(0.98); }
+.num-btn:active{ transform: translateY(1px); }
+
+/* Botón principal (ocupa toda la fila) */
+.action-btn{
+  grid-column: 1 / -1;
+  margin-top: 6px;
+
+  height: 66px;
+  border-radius: 16px;
+  border: none;
+
+  background: #e6c700;
+  color: #1b2a3a;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+
+  box-shadow: 0 16px 26px rgba(0,0,0,0.22);
+  cursor: pointer;
+  transition: transform .08s ease, filter .12s ease;
+}
+
+.action-btn:hover{ filter: brightness(0.97); }
+.action-btn:active{ transform: translateY(1px); }
+
+/* Responsive */
+@media (max-width: 480px){
+  .atm-box{ padding: 28px 18px 22px; }
+  .num-btn{ height: 58px; }
+}
+

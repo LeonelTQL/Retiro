@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background: white; padding: 50px; text-align: center;">
+
+    <h2 style="color: #0F265C;">Pagar / Transferir</h2>
+    <p>Simulación: Ingrese el ID de Cuenta del destinatario (Lo que leería el QR).</p>
+    
+    <div style="background: #fff3cd; padding: 10px; display: inline-block; border-radius: 5px; margin-bottom: 20px;">
+        <small>Tip: La cuenta de Juan es ID <b>1</b>. La cuenta de Tienda es ID <b>2</b>.</small>
+    </div>
+
+    <form action="/banca-web/deuna/confirmar-pago" method="POST" style="max-width: 300px; margin: 0 auto;">
+        <input type="hidden" name="id_usuario_logueado" value="{{ cuenta.id_cliente }}">
+        
+        <label>ID Cuenta Destino:</label>
+        <input type="number" name="id_cuenta_destino" required style="width: 100%; padding: 10px; font-size: 20px; margin-bottom: 20px; text-align: center;">
+        
+        <button type="submit" class="btn-pichincha">CONTINUAR</button>
+    </form>
+    
+    <br>
+    <a href="/banca-web/deuna/{{ cuenta.id_cliente }}" style="color: gray;">Cancelar</a>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Banca Web Pichincha</title>
+</head>
+
+<body>
+    <div id="app-flags"
+     data-modo-simulacion-pago="{{ modo_simulacion_pago | default(false) }}">
+    </div>
+    <div class="header">
+        <div class="header-inner">
+            <!-- Logo: usa imagen si existe; si no, queda el fallback con P -->
+            <div class="logo logo-text">
+                <img class="logo-img" src="{{ url_for('static', filename='img/logo.png') }}" alt="Banco Pichincha" />
+            </div>
+
+            <div class="header-actions">
+                <div class="header-pill">Banca Web</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-web">
+        
+        <div class="sidebar">
+            <small style="color: #999; display: block; margin-bottom: 10px; font-weight: bold;">MENÚ PRINCIPAL</small>
+            
+            <a href="/banca-web/{{ cuenta.id_cliente }}" 
+               class="menu-item {{ 'active' if seccion == 'productos' else '' }}">
+               Mis Productos
+            </a>
+
+            <a href="/banca-web/{{ cuenta.id_cliente }}/retiro" 
+               class="menu-item {{ 'active' if seccion == 'retiro' else '' }}">
+               Retiro sin tarjeta
+            </a>
+
+            <a href="/banca-web/{{ cuenta.id_cliente }}/deuna" 
+               class="menu-item {{ 'active' if seccion == 'deuna' else '' }}"
+               style="display: flex; justify-content: space-between; align-items: center;">
+               <span>Deuna!</span>
+               <span style="background: var(--bp-blue); color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px;">APP</span>
+            </a>
+
+            <div class="menu-item-cerrar">
+                <a href="/" class="menu-item" style="color: #d9534f;">Cerrar Sesión</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            {% if seccion == 'productos' %}
+
+                <div class="header-saldo">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="cuenta-label">
+                            CUE{{ cuenta.numero_cuenta[-4:] }} <span style="color: #ffc107; margin-left: 5px;">★</span>
+                        </div>
+                        <div style="color: #3483fa; font-size: 14px; font-weight: bold;">
+                            <i class="fas fa-share-alt"></i> Compartir cuenta
+                        </div>
+                    </div>
+                    
+                    <div class="monto-gigante">
+                        $ {{ cuenta.saldo_actual }} <span style="font-size: 20px; color: #3483fa; cursor: pointer;">👁</span>
+                    </div>
+                </div>
+
+                <div class="acciones-grid">
+                    <div class="accion-btn">
+                        <div class="circulo-icon">↔</div>
+                    </div>
+                    <div class="accion-btn">
+                        <div class="circulo-icon">🔄</div>
+                        <span class="badge-nuevo">NUEVO</span>
+                    </div>
+                    <div class="accion-btn">
+                        <div class="circulo-icon">💳</div>
+                    </div>
+                    <div class="accion-btn">
+                        <div class="circulo-icon">🛡</div>
+                        <span class="badge-nuevo">NUEVO</span>
+                    </div>
+                </div>
+
+                <div class="fecha-header">Últimos movimientos</div>
+                
+                <div class="lista-transacciones">
+                    {% for tx in transacciones %}
+                        <div class="item-transaccion">
+                            <div class="desc-tx">
+                                {{ tx.descripcion }}
+                            </div>
+
+                            <div class="montos-tx">
+                                {% if tx.monto >= 0 %}
+                                    <span class="valor-tx valor-verde">
+                                        +${{ "%.2f"|format(tx.monto) }} >
+                                    </span>
+                                {% else %}
+                                    <span class="valor-tx valor-negro">
+                                        {{ "%.2f"|format(tx.monto) }} >
+                                    </span>
+                                {% endif %}
+                                
+                                <span class="saldo-restante">$ {{ "%.2f"|format(tx.saldo_resultante or 0) }}</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div style="padding: 20px; text-align: center; color: #999;">
+                            No hay movimientos recientes.
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button class="btn-flotante">
+                    📅 Filtrar por fechas
+                </button>
+
+            {% endif %}
+
+            {% if seccion == 'retiro' %}
+                <div class="card">
+                    <h2 style="color: var(--bp-blue); margin-top: 0;">Retiro sin Tarjeta</h2>
+                    <p style="color: #666;">Genere una orden para retirar dinero usando su número celular.</p>
+                    
+                    <div style="margin-top: 20px; background: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px;">
+                        <label style="font-weight: bold; color: var(--bp-blue);">Celular beneficiario:</label>
+                        <input type="tel" id="telefono-retiro" style="width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Ej: 0991234567">
+
+                        <label style="font-weight: bold; color: var(--bp-blue);">Monto a retirar ($):</label>
+                        <input type="number" id="monto-retiro" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Ej: 20.00">
+                        
+                        <button
+                            id="btn-generar-retiro"
+                            class="btn-pichincha"
+                            data-id-cuenta="{{ cuenta.id_cuenta }}">
+                            GENERAR CÓDIGO
+                        </button>
+
+                    </div>
+
+                    <div id="resultado-retiro" style="margin-top: 20px; display: none; background: #e8f5e9; padding: 20px; border-radius: 5px; border: 1px solid #c8e6c9; text-align: center;">
+                        <h3 style="color: #2e7d32; margin: 0;">¡Orden Generada!</h3>
+                        <p>Acérquese al cajero e ingrese su celular y este código:</p>
+                        <div style="font-size: 32px; font-weight: bold; letter-spacing: 5px; margin: 15px 0; color: var(--bp-blue);" id="codigo-otp-display"></div>
+                        <small style="color: #666;">Válido por 30 minutos.</small>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if seccion == 'deuna' %}
+                <div class="card" style="text-align: center; position: relative;">
+                    
+                    <div style="position: absolute; top: 20px; right: 20px; background: #f9f9f9; padding: 10px 15px; border-radius: 8px; border: 1px solid #eee; text-align: right;">
+                        <small style="color: #666; display: block; font-size: 10px;">SALDO DISPONIBLE</small>
+                        <span style="color: var(--bp-blue); font-weight: bold; font-size: 18px;">$ {{ cuenta.saldo_deuna }}</span>
+                    </div>
+
+                    <div style="margin-bottom: 30px; margin-top: 20px;">
+                        <img src="{{ url_for('static', filename='img/deuna_logo.png') }}" style="height: 40px; opacity: 0.8;">
+                        <h2 style="color: var(--bp-blue); margin: 10px 0 0 0;">Ecosistema Deuna!</h2>
+                        <p style="color: #666; font-size: 14px;">La forma más rápida de pagar y cobrar.</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <button onclick="abrirModalRecarga()" class="btn-pichincha" style="width: auto; display: inline-block; background: #e0e0e0; color: #333; font-size: 14px; padding: 8px 20px;">
+                            ➕ Recargar Saldo Deuna
+                        </button>
+                    </div>
+
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        
+                        <div onclick="mostrarVista('vista-cobrar')" style="flex: 1; min-width: 150px; background: #333; color: white; padding: 20px; border-radius: 8px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <div style="font-size: 30px;">📱</div>
+                            <h3>Cobrar</h3>
+                            <small>Mostrar mi QR</small>
+                        </div>
+
+                        <div onclick="mostrarVista('vista-pagar')" style="flex: 1; min-width: 150px; background: var(--bp-yellow); color: var(--bp-blue); padding: 20px; border-radius: 8px; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <div style="font-size: 30px;">📷</div>
+                            <h3>Pagar</h3>
+                            <small>Escanear QR</small>
+                        </div>
+                    </div>
+
+                    <div id="vista-cobrar" style="display: none; margin-top: 30px; animation: fadeIn 0.5s;">
+                        <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                        <h3 style="color: var(--bp-blue);">Tu Código QR</h3>
+                        <div style="background: white; padding: 10px; display: inline-block; border: 1px solid #ddd; border-radius: 10px;">
+                            <img src="data:image/png;base64,{{ qr_b64 }}" alt="QR Code" style="width: 200px; height: 200px;">
+                        </div>
+                        <p style="margin-top: 10px; color: #666;">Cuenta vinculada: <b>{{ cuenta.numero_cuenta }}</b></p>
+                        
+                        <div style="margin-top: 25px; background: #e3f2fd; padding: 15px; border-radius: 8px; border: 1px dashed #e6c700; text-align: center;">
+                            <a href="/simulacion/escanear-qr/{{ id_otro_usuario }}/{{ cuenta.id_cliente }}" class="btn-pichincha" style="background: #e6c700; color: white; margin: 0; font-size: 14px; padding: 10px;">
+                                Simular Escaneo de QR de Otro Usuario
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="vista-pagar" style="display: none; margin-top: 30px; animation: fadeIn 0.5s;">
+                        <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                        <h3 style="color: var(--bp-blue);">Realizar Pago</h3>
+                        
+                        <form action="/banca-web/deuna/confirmar-pago" method="POST" style="max-width: 300px; margin: 0 auto;">
+                            <input type="hidden" name="id_usuario_logueado" value="{{ cuenta.id_cliente }}">
+                            
+                            <div style="text-align: left; margin-bottom: 15px;">
+                                <label style="font-weight: bold; color: #666; font-size: 14px;">ID Cuenta Destino:</label>
+                                <input type="number" name="id_cuenta_destino" id="input-destino" value="{{ id_destino_prefill if id_destino_prefill else '' }}" placeholder="Ej: 2" required style="width: 100%; padding: 12px; font-size: 16px; text-align: center; border: 2px solid var(--bp-yellow); border-radius: 4px; outline: none;">
+                            </div>
+                            
+                            <button type="submit" class="btn-pichincha">CONTINUAR</button>
+                        </form>
+                    </div>
+
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div id="modalRecarga" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color: var(--bp-blue); margin-top: 0;">Recargar Saldo</h3>
+            <p style="color: #666;">Ingrese el monto a depositar en su cuenta:</p>
+            
+            <input type="number" id="monto-recarga" style="width: 100%; padding: 12px; font-size: 20px; text-align: center; border: 2px solid #ddd; border-radius: 5px; margin-bottom: 20px;" placeholder="$ 0.00">
+            
+            <button
+                id="btn-confirmar-recarga"
+                class="btn-pichincha"
+                data-id-cuenta="{{ cuenta.id_cuenta }}">
+                ACEPTAR
+            </button>
+
+            <button onclick="cerrarModalRecarga()" class="btn-pichincha btn-cancelar">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGICA DEL MODAL DE RECARGA ---
+        function abrirModalRecarga() {
+        document.getElementById('modalRecarga').style.display = 'flex';
+        document.body.classList.add('modal-open');
+        document.getElementById('monto-recarga').focus();
+        }
+
+        function cerrarModalRecarga() {
+        document.getElementById('modalRecarga').style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.getElementById('monto-recarga').value = '';
+        }
+
+
+        function confirmarRecarga(idCuenta) {
+            const monto = document.getElementById('monto-recarga').value;
+            if(!monto || monto <= 0) return alert("Ingrese un monto válido mayor a 0.");
+
+            fetch('/api/recargar-saldo', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id_cuenta: idCuenta, monto: monto })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    alert("✅ Recarga exitosa");
+                    window.location.reload(); // Recarga la página para ver el nuevo saldo
+                } else {
+                    alert("❌ Error: " + data.message);
+                }
+            })
+            .catch(err => alert("Error de conexión"));
+        }
+
+        // --- FUNCIONES EXISTENTES ---
+        function generarCodigoRetiro(idCuenta) {
+            const monto = document.getElementById('monto-retiro').value;
+            const telefono = document.getElementById('telefono-retiro').value; // NUEVO
+
+            if(!monto || monto <= 0) return alert("Ingrese un monto válido.");
+            if(!telefono || telefono.length < 9) return alert("Ingrese un número de celular válido."); // Validación simple
+
+            fetch('/api/generar-orden', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                // Enviamos monto Y telefono
+                body: JSON.stringify({ id_cuenta: idCuenta, monto: monto, telefono: telefono }) 
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    document.getElementById('resultado-retiro').style.display = 'block';
+                    document.getElementById('codigo-otp-display').innerText = data.otp;
+                } else { alert('Error: ' + data.message); }
+            });
+        }
+        function mostrarVista(id) {
+            document.getElementById('vista-cobrar').style.display = 'none';
+            document.getElementById('vista-pagar').style.display = 'none';
+            const el = document.getElementById(id);
+            if(el) el.style.display = 'block';
+        }
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+    // 0) Botón generar retiro (lee data-id-cuenta)
+    const btnGenerarRetiro = document.getElementById("btn-generar-retiro");
+    if (btnGenerarRetiro) {
+        btnGenerarRetiro.addEventListener("click", function () {
+        const idCuenta = Number(btnGenerarRetiro.dataset.idCuenta);
+        generarCodigoRetiro(idCuenta);
+        });
+    }
+
+    // 1) Botón confirmar recarga (lee data-id-cuenta)
+    const btnRecarga = document.getElementById("btn-confirmar-recarga");
+    if (btnRecarga) {
+        btnRecarga.addEventListener("click", function () {
+        const idCuenta = Number(btnRecarga.dataset.idCuenta);
+        confirmarRecarga(idCuenta);
+        });
+    }
+
+    // 2) Leer flags desde HTML (SIN JINJA EN JS)
+    const flags = document.getElementById("app-flags");
+    const modoSimulacionPago = (flags?.dataset.modoSimulacionPago || "").toLowerCase() === "true";
+
+    if (modoSimulacionPago) {
+        mostrarVista("vista-pagar");
+    }
+    });
+
+
+    </script>
+</body>
+</html>

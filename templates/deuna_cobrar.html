@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background: #2D2A26; color: white; text-align: center; padding-top: 50px;">
+    
+    <h2>Mi Código QR</h2>
+    <p>Muestra este código para recibir dinero en tu cuenta <b>{{ cuenta.numero_cuenta }}</b></p>
+    
+    <div style="background: white; display: inline-block; padding: 20px; border-radius: 10px; margin: 20px;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ link_qr }}">
+    </div>
+
+    <br><br>
+    <a href="/banca-web/deuna/{{ cuenta.id_cliente }}" class="btn-pichincha" style="background: white; color: black; text-decoration: none;">Volver</a>
+
+    <div style="margin-top: 30px; opacity: 0.5; font-size: 12px;">
+        ID Cuenta Interno: {{ cuenta.id_cuenta }}
+    </div>
+</body>
+</html>

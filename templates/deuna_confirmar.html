@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Confirmar Pago</title>
+</head>
+<body style="background-color: #f4f4f4;">
+    
+    <div class="header">
+        <div class="logo"><span>P</span> BANCO PICHINCHA</div>
+    </div>
+
+    <div style="max-width: 400px; margin: 50px auto; background: white; padding: 40px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        
+        <h3 style="color: #0F265C; margin-bottom: 5px;">Confirmar Transferencia</h3>
+        <p style="color: #666; font-size: 14px; margin-top: 0;">Revisa los datos antes de pagar</p>
+        
+        <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 0; color: #666; font-size: 12px;">VAS A PAGAR A:</p>
+            <h2 style="margin: 5px 0; color: #0F265C;">{{ destino.nombre_destinatario }}</h2>
+            <p style="margin: 0; font-size: 14px;">Cuenta: ...{{ destino.numero_cuenta[-4:] }}</p>
+        </div>
+
+        <label style="display: block; text-align: left; font-weight: bold; color: #0F265C;">Monto a Pagar ($):</label>
+        <input type="number" 
+               id="monto" 
+               step="0.01" 
+               style="width: 100%; font-size: 30px; padding: 10px; margin-bottom: 20px; border: none; border-bottom: 2px solid #FFDD00; outline: none; text-align: center;" 
+               placeholder="0.00" 
+               autofocus>
+
+        <button onclick="ejecutarPago()" class="btn-pichincha" style="font-size: 18px;">CONFIRMAR PAGO</button>
+        
+        <br><br>
+        <a href="/banca-web/{{ origen.id_cliente }}/deuna" style="color: gray; text-decoration: none;">Cancelar</a>
+    </div>
+
+    <script>
+        function ejecutarPago() {
+            const monto = document.getElementById('monto').value;
+            const idOrigen = {{ origen.id_cuenta }};
+            const idDestino = {{ destino.id_cuenta }};
+            const idCliente = {{ origen.id_cliente }}; 
+
+            if(!monto || monto <= 0) return alert("Por favor ingresa un monto válido.");
+
+            // Deshabilitar botón para evitar doble click
+            document.querySelector('button').disabled = true;
+            document.querySelector('button').innerText = "Procesando...";
+
+            fetch('/api/deuna-transferir', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    id_origen: idOrigen,
+                    id_destino: idDestino,
+                    monto: monto
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    alert("✅ ¡Pago realizado con éxito!");
+                    
+                    // --- AQUÍ ESTÁ EL CAMBIO ---
+                    // Antes te llevaba a /deuna/, ahora te lleva a la RAÍZ de la banca web
+                    // para que veas tu saldo actualizado en "Mis Productos".
+                    window.location.href = "/banca-web/" + idCliente; 
+                    
+                } else {
+                    alert("❌ " + data.message);
+                    document.querySelector('button').disabled = false;
+                    document.querySelector('button').innerText = "CONFIRMAR PAGO";
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Error de conexión");
+                document.querySelector('button').disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
