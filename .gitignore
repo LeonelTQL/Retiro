@@ -1,0 +1,21 @@
+# Entorno
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtualenv
+venv/
+.env/
+.venv/
+
+# Flask
+instance/
+*.log
+
+# IDEs
+.vscode/
+.idea/
