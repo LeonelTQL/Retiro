@@ -8,6 +8,12 @@ from flask import Flask, render_template, request, jsonify
 import psycopg
 from psycopg.rows import dict_row
 import qrcode
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+
 
 app = Flask(__name__)
 
@@ -15,7 +21,8 @@ app = Flask(__name__)
 # CONFIGURACIÓN DE BASE DE DATOS (SUPABASE)
 # ==========================================
 
-DATABASE_URL = "postgresql://postgres.cvbjfjhmnsbidayjkrak:0562003190223Mla@aws-1-us-east-1.pooler.supabase.com:6543/postgres"
+DATABASE_URL = os.getenv("DATABASE_URL")
+print("DATABASE_URL cargada:", bool(DATABASE_URL))
 
 def get_db_connection():
     return psycopg.connect(
